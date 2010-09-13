@@ -1,4 +1,6 @@
-def check_ipfilter(self, environ, ipfilter):
+import os
+
+def check_ipfilter(environ, ipfilter):
     """Only display the logview info if the user's ip is a valid one
     
     :param environ: the wsgi environ property
@@ -14,3 +16,7 @@ def check_ipfilter(self, environ, ipfilter):
         return True
     else:
         return False
+
+def get_js_code(tmpl_dir):
+    """Just to load up the custom jquery as DV so we can use it"""
+    return open(os.path.join(tmpl_dir, 'inupy.js')).read()

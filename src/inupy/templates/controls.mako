@@ -1,4 +1,3 @@
-<script src="inupy.js" charset="utf-8"></script>
 <style type="text/css">
     #dozer_control {
         text-align: center;

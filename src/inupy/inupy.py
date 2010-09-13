@@ -7,7 +7,7 @@ from webob import Request
 
 here_dir = os.path.dirname(os.path.abspath(__file__))
 
-from utils import check_ipfilter
+from utils import check_ipfilter, get_js_code
 
 
 class Inupy(object):
@@ -37,10 +37,10 @@ class Inupy(object):
             if 'content-type' in response.headers and \
                response.headers['content-type'].startswith('text/html'):
                 controls_ui = self.render_html('/controls.mako')
-                our_js = re.escape(open(os.path.join(self.tmpl_dir, 'inupy.js')).read())
 
-                replacement = r'<body\1><script type="type/javascript">{0}</script>{1}'.format(our_js, controls_ui)
+                replacement = r'<body\1><script type="text/javascript">inupy_js</script>{0}'.format(controls_ui)
                 response.body = re.sub(r'<body([^>]*)>', replacement, response.body)
+                response.body = response.body.replace('inupy_js', get_js_code(self.tmpl_dir))
 
         return response(environ, start_response)
 

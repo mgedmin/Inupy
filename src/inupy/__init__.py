@@ -3,15 +3,15 @@ import itertools
 from paste.deploy.converters import asbool
 
 from inupy import Inupy
+from logview import Logview
 
 log = logging.getLogger(__name__)
 
 def inupy_filter_factory(global_conf, **kwargs):
-    log.debug(global_conf)
-    log.debug(kwargs)
     def filter(app):
         return Inupy(app, global_conf, **kwargs)
     return filter
+
 
 def inupy_filter_app_factory(app, global_conf, **kwargs):
     return Inupy(app, global_conf, **kwargs)
@@ -20,9 +20,31 @@ def inupy_filter_app_factory(app, global_conf, **kwargs):
 def setup(app, config, **kwargs):
     """Determine to setup and modify the wsgi app
 
+    Config can contain optional additional loggers and the colors
+    they should be highlighted (in an ini file)::
+
+        logview.color.sqlalchemy = #ff0000
+
+    Or if passing a dict::
+
+        app = Logview(app, {'logview.color.sqlalchemy':'#ff0000'})
+
+    Config can also contain an ipfilter option
+
+        logview.ipfilter = 127.0.0.1
+
+    or a series of ip addresses to check for, constructed into a list
+
+        logview.ipfilter = 127.0.0.1,192.168.0.1
+
     """
     inupy_config = process_config(itertools.chain(config.iteritems(),
                                 kwargs.iteritems()))
+
+    # if we have setup the various parts, add them in
+    if inupy_config['logview']:
+        app = Logview(app, inupy_config)
+
     app = Inupy(app, inupy_config)
 
     return app
