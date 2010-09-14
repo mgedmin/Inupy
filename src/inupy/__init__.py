@@ -5,6 +5,7 @@ from paste.deploy.converters import asbool
 from inupy import Inupy
 from logview import Logview
 from profile import Profiler
+from leak import Leak
 
 log = logging.getLogger(__name__)
 
@@ -48,6 +49,9 @@ def setup(app, config, **kwargs):
 
     if inupy_config['profiler']:
         app = Profiler(app, inupy_config)
+
+    if inupy_config['memory']:
+        app = Leak(app, inupy_config)
 
     app = Inupy(app, inupy_config)
 
