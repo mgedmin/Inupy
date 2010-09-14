@@ -1,7 +1,7 @@
 <style type="text/css">
-    #dozer_control {
+    #inupy_control {
         text-align: center;
-        width: 150px;
+        width: 25%;
         padding: 2px;
         border: solid #000 1px;
         border-top: 0px;
@@ -11,7 +11,7 @@
         height: 30px;
         left: 0px;
         right: 0px;
-        top: -27px;
+        top: -28px;
         z-index: 1000;
         position: fixed;
         margin-left: auto;
@@ -19,7 +19,7 @@
         background-color: #CCC;
     }
 
-    #dozer_control {
+    #inupy_control {
         -webkit-transition: all 0px .5s ease-in-out;
         -moz-transition: all .5s ease-in-out;
         -o-transition: all .5s ease-in-out;
@@ -27,18 +27,17 @@
         transition: all .5s ease-in-out;
     }
 
-    #dozer_control:hover {
+    #inupy_control:hover {
         background-color: #999;
         cursor: pointer;
         top: 0px;
     }
 
-    .dozer_button {
+    .inupy_active_button, .inupy_inactive_button {
         margin: 3px 1.5px;
         padding: 1px 5px;
         color: #FFF;
         font-weight: bold;
-        float: left;
         text-align: center;
         background: #222;
         display-inline: block;
@@ -51,35 +50,63 @@
         cursor: pointer;
     }
 
-    .dozer_button a {
+    .inupy_active_button a {
         color: #FFF;
         text-decoration: none;
     }
 
-    .dozer_button a:hover {
+    .inupy_active_button a:hover {
         color: #FFCC00;
     }
 
-    #dlv_footer th,#dlv_footer td {
-        cursor: pointer;
-        color: #FFCC00;
-        background-color: #333;
+    .inupy_inactive_button a {
+        color: #CCC;
+        text-decoration: none;
     }
 
-    #DLVlogevents thead th {
-        cursor: pointer;
-        color: #FFCC00;
-        background-color: #333;
+    .inupy_inactive_button a:hover {
+        color: #CCC;
     }
 </style>
-<div id="dozer_control">
-    <div id="dozer_logview" class="dozer_button" title="Open LogView">
-        <a href="#" onclick="DLV.show_events('DLVlogevents');return false;">Log</a>
-    </div>
-    <div id="dozer_profiler" class="dozer_button" title="Open Profiler">
-        <a target="_blank" href="/_profiler/showall">Profile</a>
-    </div>
-    <div id="dozer_leak" class="dozer_button" title="Open Dozer Mem">
-        <a href="/_dozer/index" target="_blank">Memory</a>
-    </div>
+ <%
+    logview_active = False
+    logview_class = "inupy_inactive_button"
+    if inupy_config['logview']:
+        logview_active = True
+        logview_class = "inupy_active_button"
+
+
+    profiler_active = False
+    profiler_class = "inupy_inactive_button"
+    if inupy_config['profiler']:
+        profiler_active = True
+        profiler_class = "inupy_active_button"
+
+    memory_active = False
+    memory_class = "inupy_inactive_button"
+    if inupy_config['memory']:
+        memory_active = True
+        memory_class = "inupy_active_button"
+%>
+
+<div id="inupy_control">
+    <span>
+        <span id="inupy_logview" class="${logview_class}" title="Open LogView">
+            <a href="#" onclick="ILV.show_events('ILVlogevents');return false;">Log</a>
+        </span>
+        <span id="inupy_profiler" class="${profiler_class}" title="Open Profiler">
+            % if profiler_active:
+                <a target="_blank" href="/_profiler/showall">Profile</a>
+            % else:
+                <a href="#">Profile</a>
+            % endif
+        </span>
+        <span id="inupy_leak" class="${memory_class}" title="Open Memory Dump">
+            % if memory_active:
+                <a target="_blank" href="/_inupy/index">Memory</a>
+            % else:
+                <a href="#">Memory</a>
+            % endif
+        </span>
+    </span>
 </div>

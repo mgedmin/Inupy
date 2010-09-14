@@ -24,14 +24,14 @@ def bg_color(event, log_colors):
         background-color: #333;
     }
 
-    #DLVlogevents thead th {
+    #ILVlogevents thead th {
         cursor: pointer;
         color: #FFCC00;
         background-color: #333;
     }
 </style>
 <div style="width: 100%; position: absolute; top:0; left: 0; z-index: 200000; font-size:11px;">
-    <div id="DLVlogevents" style="display:none;">
+    <div id="ILVlogevents" style="display:none;">
         <table style="width: 100%; overflow: auto; background-color: #ddd;padding:2px;">
             <thead>
                 <tr>
@@ -64,7 +64,7 @@ def bg_color(event, log_colors):
                                 % if use_split:
                                     <span class="dlv_message_link">${first}</span>\
                                     <span style="display:inline;"
-                                    id="${id(event)}_extra"><a href="#" onclick="DLV.show_span(${id(event)})">...</a></span>\
+                                    id="${id(event)}_extra"><a href="#" onclick="ILV.show_span(${id(event)})">...</a></span>\
                                     <span id="${id(event)}" style="display:none">${last}</span>
                                 % else:
                                     ${msg | h}\
@@ -83,24 +83,24 @@ def bg_color(event, log_colors):
 </div>
 <script type="text/javascript">
 DV(document).ready(function() {
-    DLV.bind_hover();
+    ILV.bind_hover();
 
 });
 
-var DLV = {
+var ILV = {
     // load the logged events table ui
     'show_events':  function(name) {
 
-        DV('#DLVlogevents').show('slow', function() {
+        DV('#ILVlogevents').show('slow', function() {
             // bind the close action on the th and the bottom row of the table
-            DV('#dlv_footer th,#dlv_footer td,#DLVlogevents thead th').bind('click', function () {
-                DV('#DLVlogevents').hide();
+            DV('#dlv_footer th,#dlv_footer td,#ILVlogevents thead th').bind('click', function () {
+                DV('#ILVlogevents').hide();
             });
         });
 
         return false;
     },
-    
+
     // expand the log message span for a specific log event
     'show_span': function(name) {
         var name_id = "#" + name;
@@ -110,7 +110,7 @@ var DLV = {
     },
 
     'bind_hover': function() {
-        DV('#DLVlogevents tbody tr').bind('hover', function() {
+        DV('#ILVlogevents tbody tr').bind('hover', function() {
             DV(this).find('td').attr('background-color', '#666');
         });
     }

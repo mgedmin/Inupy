@@ -4,6 +4,7 @@ from paste.deploy.converters import asbool
 
 from inupy import Inupy
 from logview import Logview
+from profile import Profiler
 
 log = logging.getLogger(__name__)
 
@@ -44,6 +45,9 @@ def setup(app, config, **kwargs):
     # if we have setup the various parts, add them in
     if inupy_config['logview']:
         app = Logview(app, inupy_config)
+
+    if inupy_config['profiler']:
+        app = Profiler(app, inupy_config)
 
     app = Inupy(app, inupy_config)
 
@@ -91,7 +95,7 @@ def process_config(config_values):
                 proc_config['memory'] = asbool(val)
 
             else:
-                proc_config[key] = val
+                proc_config[our_key] = val
 
-
+    print proc_config
     return proc_config

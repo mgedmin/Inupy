@@ -36,7 +36,8 @@ class Inupy(object):
             self.logger.log(self.loglevel, 'request finished')
             if 'content-type' in response.headers and \
                response.headers['content-type'].startswith('text/html'):
-                controls_ui = self.render_html('/controls.mako')
+                controls_ui = self.render_html('/controls.mako',
+                        inupy_config=self.inupy_config)
 
                 replacement = r'<body\1><script type="text/javascript">inupy_js</script>{0}'.format(controls_ui)
                 response.body = re.sub(r'<body([^>]*)>', replacement, response.body)
@@ -45,5 +46,6 @@ class Inupy(object):
         return response(environ, start_response)
 
     def render_html(self, name, **vars):
+
         tmpl = self.mako.get_template(name)
         return tmpl.render(**vars)
