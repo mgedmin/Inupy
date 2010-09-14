@@ -1,2 +1,6 @@
 include README.rst
 include NEWS.txt
+include src/inupy/assets/*
+include src/inupy/assets/css/*
+include src/inupy/assets/css/images/*
+include src/inupy/templates/*

@@ -58,14 +58,14 @@ ${total_cost}&nbsp;ms\
 <%def name="javascript()">
 ${parent.javascript()}
 <script>
-$(".delete").click(function() {
-    tr = $(this).parent().parent();
-    $.ajax({
+DV(".delete").click(function() {
+    tr = DV(this).parent().parent();
+    DV.ajax({
       type: "POST",
       url: "/_profiler/delete/"+tr.attr("pid"),
       success: function(msg){
         tr.remove();
-        if ($("tr.error").length == 0) $("#error-header").remove();
+        if (DV("tr.error").length == 0) DV("#error-header").remove();
       }
     });
     return false;
