@@ -10,12 +10,14 @@ from leak import Leak
 log = logging.getLogger(__name__)
 
 def inupy_filter_factory(global_conf, **kwargs):
-    def filter(app):
+    """Register filter factory for paste"""
+    def paste_filter(app):
         return Inupy(app, global_conf, **kwargs)
-    return filter
+    return paste_filter
 
 
 def inupy_filter_app_factory(app, global_conf, **kwargs):
+    """Register filter factory app for paste"""
     return Inupy(app, global_conf, **kwargs)
 
 
@@ -73,15 +75,14 @@ def process_config(config_values):
     proc_config['profiler'] = False
     proc_config['memory'] = False
 
-    opt = ['logview', 'profiler', 'memory']
-
     for key, val in config_values:
         if key.startswith('inupy.'):
             our_key = key[6:]
 
             if our_key == 'ipfilter':
                 if ',' in val:
-                    proc_config['ipfilter'] = [v.strip() for v in val.split(',')]
+                    proc_config['ipfilter'] = [v.strip() for v in 
+                            val.split(',')]
                 else:
                     proc_config['ipfilter'] = val
 
