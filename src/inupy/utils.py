@@ -2,7 +2,7 @@ import os
 
 def check_ipfilter(environ, ipfilter):
     """Only display the logview info if the user's ip is a valid one
-    
+
     :param environ: the wsgi environ property
     :param ipfilter: list of ip addresses to check against
 
@@ -12,7 +12,7 @@ def check_ipfilter(environ, ipfilter):
     else:
         user_ip = environ['REMOTE_ADDR']
 
-    if user_ip in self.ipfilter:
+    if user_ip in ipfilter:
         return True
     else:
         return False
