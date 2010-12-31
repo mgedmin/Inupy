@@ -32,7 +32,7 @@ def bg_color(event, log_colors):
         width: 100%;
         overflow: auto;
         color: #fff;
-        background-color: rgba(51, 51, 51, 0.9);
+        background-color: rgba(51, 51, 51, 0.97);
         border-spacing: 0;
         border-collapse: collapse;
     }
@@ -50,7 +50,7 @@ def bg_color(event, log_colors):
     #ILVlogevents tr {
         text-align: left;
         vertical-align: top;
-        border-bottom: 1px solid rgba(85, 85, 85, 0.9);
+        border-bottom: 1px solid rgba(85, 85, 85, 0.97);
     }
 
     #dlv_footer {
