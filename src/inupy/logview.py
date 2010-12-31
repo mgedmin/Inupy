@@ -179,7 +179,11 @@ class RequestHandler(logging.Handler):
         the buffer.
         """
         self.buffer.setdefault(record.thread, []).append(record)
-        if self.keep_tracebacks and (not self.keep_tracebacks_limit or
+        if record.exc_info:
+            etype, evalue, tb = record.exc_info
+            record.traceback = (traceback.format_tb(tb)
+                                + traceback.format_exception_only(etype, evalue))
+        elif self.keep_tracebacks and (not self.keep_tracebacks_limit or
                 len(self.buffer[record.thread]) < self.keep_tracebacks_limit):
             f = sys._getframe(self.skip_last_n_frames)
             record.traceback = traceback.format_list(
