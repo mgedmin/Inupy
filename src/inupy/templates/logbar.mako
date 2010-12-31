@@ -152,7 +152,9 @@ ${frame}\
             <tfoot>
                 <tr id="dlv_footer">
                     <th colspan="2">Total Time:</th>
-                    <td colspan="4">${'%d' % (1000*tottime)}ms</td>
+                    <td colspan="4">${'%d' % (1000*tottime)}ms
+                      <span style="float: right; font-weight: normal; text-decoration: underline; color: #ccc">[close]</span>
+                    </td>
                 </tr>
             </tfoot>
         </table>
