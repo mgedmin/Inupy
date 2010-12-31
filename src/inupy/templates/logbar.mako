@@ -16,6 +16,12 @@ def bg_color(event, log_colors):
             return log_colors[key]
     return 'inherit'
 
+def fg_color(frame, traceback_colors):
+    for key in traceback_colors:
+        if key in frame:
+            return traceback_colors[key]
+    return None
+
 %>
 <style type="text/css">
     #inupy-log-container {
@@ -51,6 +57,12 @@ def bg_color(event, log_colors):
         text-align: left;
         vertical-align: top;
         border-bottom: 1px solid rgba(85, 85, 85, 0.97);
+    }
+
+    #ILVlogevents pre {
+        padding: 6px;
+        margin: 0;
+        font: 8pt monospace;
     }
 
     #dlv_footer {
@@ -115,6 +127,19 @@ def bg_color(event, log_colors):
                                 % else:
                                     ${msg | h}\
                                 % endif
+                    % if hasattr(event, 'traceback'):
+                    <span style="float: right; cursor: pointer; text-decoration: underline;" onclick="javascript:ILV.show_block('${'tb%s' % id(event)}')">TB</span>
+                    <pre id="${'tb%s' % id(event)}" style="display: none">
+                        % for frame in event.traceback:
+<% fgcolor = fg_color(frame, traceback_colors) %>\
+                            % if fgcolor:
+<span style="color: ${fgcolor}">${frame}</span>\
+                            % else:
+${frame}\
+                            % endif
+                        % endfor
+</pre>
+                    % endif
                             </td>
                         </tr>
                     <% prev_event = event %>

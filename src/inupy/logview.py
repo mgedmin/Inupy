@@ -2,8 +2,11 @@ import logging
 import os
 import re
 import time
+import sys
+import traceback
 
 from mako.lookup import TemplateLookup
+from paste.util.converters import asbool
 from webob import Request
 
 from utils import check_ipfilter
@@ -40,6 +43,7 @@ class Logview(object):
         self.mako = TemplateLookup(directories=[tmpl_dir])
 
         self.inupy_config = config
+        config.update(kwargs)
 
         if loglevel is None:
             self.loglevel = logging.getLogger('').level
@@ -48,8 +52,21 @@ class Logview(object):
         else:
             self.loglevel = loglevel
 
+        self.keep_tracebacks = asbool(config.get(
+                'keep_tracebacks', RequestHandler.keep_tracebacks))
+        self.keep_tracebacks_limit = int(config.get(
+                'keep_tracebacks_limit', RequestHandler.keep_tracebacks_limit))
+        self.skip_first_n_frames = int(config.get(
+                'skip_first_n_frames', RequestHandler.skip_first_n_frames))
+        self.skip_last_n_frames = int(config.get(
+                'skip_last_n_frames', RequestHandler.skip_last_n_frames))
+
         reqhandler = RequestHandler()
         reqhandler.setLevel(self.loglevel)
+        reqhandler.keep_tracebacks = self.keep_tracebacks
+        reqhandler.keep_tracebacks_limit = self.keep_tracebacks_limit
+        reqhandler.skip_first_n_frames = self.skip_first_n_frames
+        reqhandler.skip_last_n_frames = self.skip_last_n_frames
         logging.getLogger('').addHandler(reqhandler)
         self.reqhandler = reqhandler
 
@@ -86,8 +103,9 @@ class Logview(object):
             reqlogs = self.reqhandler.pop_events(tok)
             if content_type.startswith('text/html'):
                 logbar = self.render_html('/logbar.mako', events=reqlogs,
-                                     logcolors=self.inupy_config['log_colors'], tottime=tottime,
-                                     start=start)
+                              logcolors=self.inupy_config['log_colors'],
+                              traceback_colors=self.inupy_config['traceback_colors'],
+                              tottime=tottime, start=start)
                 response.body = re.sub(r'<body([^>]*)>', r'<body\1>%s' % logbar, response.body)
 
             elif content_type.startswith('application/json'):
@@ -142,6 +160,13 @@ class RequestHandler(logging.Handler):
     thread id when available.
 
     """
+
+    keep_tracebacks = False
+    keep_tracebacks_limit = 20 # too many of these make things very very slow
+    skip_first_n_frames = 0
+    skip_last_n_frames = 6 # number of frames beween logger.log() and our emit()
+                           # determined empirically on Python 2.6
+
     def __init__(self):
         """Initialize the handler."""
         logging.Handler.__init__(self)
@@ -154,6 +179,11 @@ class RequestHandler(logging.Handler):
         the buffer.
         """
         self.buffer.setdefault(record.thread, []).append(record)
+        if self.keep_tracebacks and (not self.keep_tracebacks_limit or
+                len(self.buffer[record.thread]) < self.keep_tracebacks_limit):
+            f = sys._getframe(self.skip_last_n_frames)
+            record.traceback = traceback.format_list(
+                traceback.extract_stack(f)[self.skip_first_n_frames:])
 
     def pop_events(self, thread_id):
         """Return all the events logged for particular thread"""

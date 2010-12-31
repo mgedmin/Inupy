@@ -71,6 +71,7 @@ def process_config(config_values):
     """
     proc_config = {}
     proc_config['log_colors'] = {}
+    proc_config['traceback_colors'] = {}
     proc_config['ipfilter'] = False
     proc_config['logview'] = False
     proc_config['profiler'] = False
@@ -90,6 +91,8 @@ def process_config(config_values):
             # allow for customizing the colors used for specific log items
             elif our_key.startswith('color.'):
                 proc_config['log_colors'][our_key[6:]] = val
+            elif our_key.startswith('traceback.'):
+                proc_config['traceback_colors'][our_key[10:]] = val
 
             elif our_key == 'logview':
                 proc_config['logview'] = asbool(val)
