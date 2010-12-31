@@ -12,6 +12,15 @@ like so:
     
     # config is the pylons environment config
     # config = load_environment(global_conf, app_conf)
+    
+    # alternative
+    try:
+        import inupy
+        if asbool(config['inupy.profiler']) or asbool(config['inupy.logview']):
+            app = inupy.setup(app, config)
+    except:
+        # If we cannot import inupy then just forget about it
+        pass
 
 
 Your application config should have options set for the various tools you wish
