@@ -98,7 +98,9 @@ def fg_color(frame, traceback_colors):
                     <th>Time</th>
                     <th>Level</th>
                     <th>Module</th>
-                    <th width="100%">Message</th>
+                    <th width="100%">Message
+                      <span style="float: right; font-weight: normal; text-decoration: underline; color: #ccc">[close]</span>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -130,7 +132,7 @@ def fg_color(frame, traceback_colors):
                                     ${msg | h}\
                                 % endif
                     % if hasattr(event, 'traceback'):
-                    <span style="float: right; cursor: pointer; text-decoration: underline;" onclick="javascript:ILV.show_block('${'tb%s' % id(event)}')">TB</span>
+                    <span style="float: right; cursor: pointer; text-decoration: underline; color: #ccc" onclick="javascript:ILV.show_block('${'tb%s' % id(event)}')">TB</span>
                     <pre id="${'tb%s' % id(event)}" style="display: none">
                         % for frame in event.traceback:
 <% fgcolor = fg_color(frame, traceback_colors) %>\
