@@ -1,5 +1,5 @@
-inupy fork/port of Dozer
-==========================
+Inupy: fork/port of Dozer
+=========================
 
 **inupy** is meant to be a combination of the tools of `Dozer`_ into a single
 WSGI middleware providing a combined user panel.  The tools are:
@@ -8,6 +8,10 @@ WSGI middleware providing a combined user panel.  The tools are:
 * CPU profiler
 * capture of logging messages
 
+Example screenshot of the control panel pop down:
+
+.. image:: http://lh3.ggpht.com/_MbJoFDKjoVk/TI1rVgf7xpI/AAAAAAAAAKY/8-jVptqp_Sk/s800/dozer_menu.png
+
 
 Setup
 -----
@@ -15,7 +19,7 @@ Setup
 You can enable inupy for your application by editing your WSGI factory
 function, or your PasteDeploy configuration file.
 
-Option 1: add this to your ``development.ini`` (or whatever you call your
+**Option 1**: add this to your ``development.ini`` (or whatever you call your
 PasteDeploy config file)::
 
     [filter-app:inupy]
@@ -27,7 +31,7 @@ PasteDeploy config file)::
 and then to use it, run ``paster serve development.ini -n inupy``.  If you do
 not specify the ``-n`` bit, inupy is disabled.
 
-Option 2: change your ``development.ini`` like this::
+**Option 2**: change your ``development.ini`` like this::
 
     [filter:inupy]
     use = egg:Inupy
@@ -42,7 +46,7 @@ Option 2: change your ``development.ini`` like this::
 
 this way ``inupy`` is always availabe.
 
-Option 3: edit your ``middleware.py`` (assuming a Pylons style project) like
+**Option 3**: edit your ``middleware.py`` (assuming a Pylons style project) like
 this::
 
     import inupy
@@ -57,6 +61,10 @@ this::
 this way it is enabled only if you have ``debug = true`` in your
 ``development.ini``.
 
+
+Configuration
+-------------
+
 Your application config should have options set for the various tools you wish
 to enable, e.g. ::
 
@@ -66,21 +74,28 @@ to enable, e.g. ::
     inupy.color.sqlalchemy = #faa
     inupy.color.pylons.templating = #bfb
 
+*TODO*: document them all
 
-Goals
------
 
-Some goals are to embed a version of jQuery into it's own namespace so it
+Goals and inspiration
+---------------------
+
+Some goals are to embed a version of jQuery into its own namespace so it
 doesn't collide with the installed applications, but gives us some tools for
-some animations/etc. Example screenshot of the control panel pop down.
+some animations/etc.
 
-.. image:: http://lh3.ggpht.com/_MbJoFDKjoVk/TI1rVgf7xpI/AAAAAAAAAKY/8-jVptqp_Sk/s800/dozer_menu.png
+Sane defaults: it should be sufficient to drop 'egg:Inupy' into a pipeline
+and have it Just Work.  For performance reasons, "expensive" tools should be
+disabled by default, with the user able to turn them on at runtime.
+
+Gorgeous look and feel like `Django Debug Toolbar`_ (one can dream...)
 
 
 Credits
 -------
 - `Dozer`_
 - `Marius's fork of Dozer`_
+- `Django Debug Toolbar`_
 
 - `Distribute`_
 - `Buildout`_
@@ -88,6 +103,7 @@ Credits
 
 .. _Dozer: http://bitbucket.org/bbangert/dozer/overview
 .. _`Marius's fork of Dozer`: http://bitbucket.org/mgedmin/dozer/overview
+.. _`Django Debug Toolbar`: http://robhudson.github.com/django-debug-toolbar/
 .. _Buildout: http://www.buildout.org/
 .. _Distribute: http://pypi.python.org/pypi/distribute
 .. _`modern-package-template`: http://pypi.python.org/pypi/modern-package-template
