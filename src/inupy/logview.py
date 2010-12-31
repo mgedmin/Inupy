@@ -67,7 +67,9 @@ class Logview(object):
 
         req = Request(environ)
         start = time.time()
-        self.logger.log(self.loglevel, 'request started')
+        self.logger.log(self.loglevel,
+                        '%s request started for %s',
+                        req.method, req.path_info)
         response = req.get_response(self.app)
 
         if self.inupy_config['ipfilter'] and not check_ipfilter(environ,
@@ -75,18 +77,20 @@ class Logview(object):
             # then we want to filter on ip and this one failed
             pass
         else:
-            self.logger.log(self.loglevel, 'request finished')
+            content_type = response.headers.get('content-type', '')
+            size = len(response.body)
+            self.logger.log(self.loglevel,
+                            'request finished: returned %d bytes of %s',
+                            size, content_type)
             tottime = time.time() - start
             reqlogs = self.reqhandler.pop_events(tok)
-            if 'content-type' in response.headers and \
-               response.headers['content-type'].startswith('text/html'):
+            if content_type.startswith('text/html'):
                 logbar = self.render_html('/logbar.mako', events=reqlogs,
                                      logcolors=self.inupy_config['log_colors'], tottime=tottime,
                                      start=start)
                 response.body = re.sub(r'<body([^>]*)>', r'<body\1>%s' % logbar, response.body)
 
-            elif 'content-type' in response.headers and json and \
-               response.headers['content-type'].startswith('application/json'):
+            elif content_type.startswith('application/json'):
                 response.body = self.render_json(response.body, events=reqlogs,
                                      logcolors=self.inupy_config['log_colors'], tottime=tottime,
                                      start=start)
