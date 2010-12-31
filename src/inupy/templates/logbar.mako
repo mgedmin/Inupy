@@ -1,6 +1,5 @@
 <%!
-import time
-converter = time.localtime
+
 def format_time(record, start, prev_record=None):
     if prev_record:
         delta_from_prev = (record.created - prev_record.created) * 1000
@@ -15,24 +14,57 @@ def bg_color(event, log_colors):
     for key in log_colors:
         if event.name.startswith(key):
             return log_colors[key]
-    return '#fff'
+    return 'inherit'
+
 %>
 <style type="text/css">
-    #dlv_footer th,#dlv_footer td {
-        cursor: pointer;
-        color: #FFCC00;
-        background-color: #333;
+    #inupy-log-container {
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 200000;
+        margin: 0;
+        padding: 0;
     }
 
-    #ILVlogevents thead th {
+    #ILVlogevents {
+        font-size: 11px;
+    }
+
+    #ILVlogevents table {
+        width: 100%;
+        overflow: auto;
+        color: #fff;
+        background-color: rgba(51, 51, 51, 0.9);
+    }
+
+    #ILVlogevents th,
+    #ILVlogevents td {
+        padding: 2px 6px;
+    }
+
+    #ILVlogevents tr {
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid #555;
+    }
+
+    #dlv_footer {
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid #555;
+    }
+
+    #ILVlogevents thead th,
+    #dlv_footer th,
+    #dlv_footer td {
         cursor: pointer;
-        color: #FFCC00;
-        background-color: #333;
     }
 </style>
-<div style="width: 100%; position: absolute; top:0; left: 0; z-index: 200000; font-size:11px;">
-    <div id="ILVlogevents" style="display:none;">
-        <table style="width: 100%; overflow: auto; background-color: #ddd;padding:2px;">
+<div id="inupy-log-container">
+    <div id="ILVlogevents" style="display: none">
+        <table>
             <thead>
                 <tr>
                     <th>Time</th>
@@ -45,7 +77,7 @@ def bg_color(event, log_colors):
                 <% prev_event = None %>
                 % for event in events:
                     <% bgcolor = bg_color(event, logcolors) %>
-                        <tr style="text-align: left; vertical-align: top; border-bottom: 1px solid #333; background-color: ${bgcolor}; color: #222;">
+                        <tr style="background-color: ${bgcolor}">
                             <td style="background-color: ${bgcolor}; text-align: right;">${format_time(event, start, prev_event)}</td>
                             <td style="background-color: ${bgcolor};">${event.levelname}</td>
                             <td style="background-color: ${bgcolor};">${event.name}</td>
@@ -73,28 +105,29 @@ def bg_color(event, log_colors):
                         </tr>
                     <% prev_event = event %>
                 % endfor
-                <tr style="text-align: left; vertical-align: top; border-bottom: 1px solid #333; background-color: #eee; color: #222;" id="dlv_footer">
+            </tbody>
+            <tfoot>
+                <tr id="dlv_footer">
                     <th colspan="2">Total Time:</th>
                     <td colspan="4">${'%d' % (1000*tottime)}ms</td>
                 </tr>
-            </tbody>
+            </tfoot>
         </table>
     </div>
 </div>
 <script type="text/javascript">
 DV(document).ready(function() {
     ILV.bind_hover();
-
 });
 
 var ILV = {
     // load the logged events table ui
-    'show_events':  function(name) {
+    'show_events': function(name) {
 
-        DV('#ILVlogevents').show('slow', function() {
+        DV('#ILVlogevents').show('fast', function() {
             // bind the close action on the th and the bottom row of the table
             DV('#dlv_footer th,#dlv_footer td,#ILVlogevents thead th').bind('click', function () {
-                DV('#ILVlogevents').hide();
+                DV('#ILVlogevents').hide('fast');
             });
         });
 
