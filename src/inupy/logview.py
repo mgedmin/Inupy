@@ -2,7 +2,6 @@ import logging
 import os
 import re
 import time
-import itertools
 
 from mako.lookup import TemplateLookup
 from webob import Request
@@ -11,7 +10,6 @@ from utils import check_ipfilter
 
 try:
     import thread
-    import threading
 except ImportError:
     thread = None
 
@@ -25,7 +23,7 @@ here_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 class Logview(object):
-    def __init__(self, app, config=None, loglevel=None, **kwargs):
+    def __init__(self, app, config=None, loglevel='DEBUG', **kwargs):
         """Stores logging statements per request, and includes a bar on
         the page that shows the logging statements
 
@@ -43,7 +41,6 @@ class Logview(object):
 
         self.inupy_config = config
 
-        self.logger = logging.getLogger(__name__)
         if loglevel is None:
             self.loglevel = logging.getLogger('').level
         elif isinstance(loglevel, basestring):
@@ -55,6 +52,12 @@ class Logview(object):
         reqhandler.setLevel(self.loglevel)
         logging.getLogger('').addHandler(reqhandler)
         self.reqhandler = reqhandler
+
+        self.logger = logging.getLogger(__name__)
+        self.logger.propagate = False
+        self.logger.setLevel(self.loglevel)
+        self.logger.addHandler(reqhandler)
+
 
     def __call__(self, environ, start_response):
         if thread:
