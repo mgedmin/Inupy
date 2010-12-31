@@ -32,8 +32,10 @@ setup(name='inupy',
     install_requires=install_requires,
     entry_points="""
         [paste.filter_factory]
+        main = inupy:inupy_filter_factory
         inupy = inupy:inupy_filter_factory
         [paste.filter_app_factory]
+        main = inupy:inupy_filter_app_factory
         inupy = inupy:inupy_filter_app_factory
     """,
 )

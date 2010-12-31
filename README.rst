@@ -1,32 +1,64 @@
 inupy fork/port of Dozer
 ==========================
 
-**inupy** is meant to be a combination of the tools of `Dozer`_ into a single user
-panel. You enabled it by adding it to your `middleware.py` in a Pylons project
-like so:
+**inupy** is meant to be a combination of the tools of `Dozer`_ into a single
+WSGI middleware providing a combined user panel.  The tools are:
 
-::
+* memory profiler
+* CPU profiler
+* capture of logging messages
+
+
+Setup
+-----
+
+You can enable inupy for your application by editing your WSGI factory
+function, or your PasteDeploy configuration file.
+
+Option 1: add this to your ``development.ini`` (or whatever you call your
+PasteDeploy config file)::
+
+    [filter-app:inupy]
+    use = egg:Inupy
+    # ... options ...
+    next = main
+    # assuming your main wsgi app is [app:main]
+
+and then to use it, run ``paster serve development.ini -n inupy``.  If you do
+not specify the ``-n`` bit, inupy is disabled.
+
+Option 2: change your ``development.ini`` like this::
+
+    [filter:inupy]
+    use = egg:Inupy
+    # ... options ...
+
+    [pipeline:main]
+    pipeline =
+        inupy
+        ...
+        yourapp
+    # assuming your main wsgi app is [app:yourapp]
+
+this way ``inupy`` is always availabe.
+
+Option 3: edit your ``middleware.py`` (assuming a Pylons style project) like
+this::
 
     import inupy
-    app = inupy.setup(app, config)
-    
-    # config is the pylons environment config
-    # config = load_environment(global_conf, app_conf)
-    
-    # alternative
-    try:
-        import inupy
-        if asbool(config['inupy.profiler']) or asbool(config['inupy.logview']):
-            app = inupy.setup(app, config)
-    except:
-        # If we cannot import inupy then just forget about it
-        pass
 
+    def make_app(...):
+        ...
+        if asbool(config['debug']):
+            app = inupy.setup(app, config)
+        app.config = config
+        return app
+
+this way it is enabled only if you have ``debug = true`` in your
+``development.ini``.
 
 Your application config should have options set for the various tools you wish
-to enable.
-
-::
+to enable, e.g. ::
 
     set inupy.profiler = true
     set inupy.logview = true
@@ -34,6 +66,9 @@ to enable.
     inupy.color.sqlalchemy = #faa
     inupy.color.pylons.templating = #bfb
 
+
+Goals
+-----
 
 Some goals are to embed a version of jQuery into it's own namespace so it
 doesn't collide with the installed applications, but gives us some tools for
