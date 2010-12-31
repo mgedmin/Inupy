@@ -74,7 +74,7 @@ Some goals are to embed a version of jQuery into it's own namespace so it
 doesn't collide with the installed applications, but gives us some tools for
 some animations/etc. Example screenshot of the control panel pop down.
 
-http://lh3.ggpht.com/_MbJoFDKjoVk/TI1rVgf7xpI/AAAAAAAAAKY/8-jVptqp_Sk/s800/dozer_menu.png
+.. image:: http://lh3.ggpht.com/_MbJoFDKjoVk/TI1rVgf7xpI/AAAAAAAAAKY/8-jVptqp_Sk/s800/dozer_menu.png
 
 
 Credits
