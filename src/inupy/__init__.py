@@ -12,13 +12,13 @@ log = logging.getLogger(__name__)
 def inupy_filter_factory(global_conf, **kwargs):
     """Register filter factory for paste"""
     def paste_filter(app):
-        return Inupy(app, global_conf, **kwargs)
+        return setup(app, global_conf, **kwargs)
     return paste_filter
 
 
 def inupy_filter_app_factory(app, global_conf, **kwargs):
     """Register filter factory app for paste"""
-    return Inupy(app, global_conf, **kwargs)
+    return setup(app, global_conf, **kwargs)
 
 
 def setup(app, config, **kwargs):
@@ -58,6 +58,7 @@ def setup(app, config, **kwargs):
     app = Inupy(app, inupy_config)
 
     return app
+
 
 def process_config(config_values):
     """Provide a dict back of the various config information we might accept
@@ -102,5 +103,4 @@ def process_config(config_values):
             else:
                 proc_config[our_key] = val
 
-    print proc_config
     return proc_config

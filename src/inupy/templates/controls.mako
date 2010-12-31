@@ -71,20 +71,20 @@
  <%
     logview_active = False
     logview_class = "inupy_inactive_button"
-    if inupy_config.get('logview'):
+    if inupy_config['logview']:
         logview_active = True
         logview_class = "inupy_active_button"
 
 
     profiler_active = False
     profiler_class = "inupy_inactive_button"
-    if inupy_config.get('profiler'):
+    if inupy_config['profiler']:
         profiler_active = True
         profiler_class = "inupy_active_button"
 
     memory_active = False
     memory_class = "inupy_inactive_button"
-    if inupy_config.get('memory'):
+    if inupy_config['memory']:
         memory_active = True
         memory_class = "inupy_active_button"
 %>

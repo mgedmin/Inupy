@@ -28,7 +28,7 @@ class Inupy(object):
         self.logger.log(self.loglevel, 'request started')
         response = req.get_response(self.app)
 
-        if self.inupy_config.get('ipfilter') and not check_ipfilter(environ,
+        if self.inupy_config['ipfilter'] and not check_ipfilter(environ,
                 self.inupy_config['ipfilter']):
             # then we want to filter on ip and this one failed
             pass
