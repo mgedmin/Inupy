@@ -72,6 +72,9 @@ def bg_color(event, log_colors):
     #dlv_footer td {
         cursor: pointer;
     }
+    .dlv_message_link {
+        cursor: pointer;
+    }
 </style>
 <div id="inupy-log-container">
     <div id="ILVlogevents" style="display: none">
@@ -96,19 +99,19 @@ def bg_color(event, log_colors):
                                 <%
                                     msg = event.getMessage()
                                     length_limit = 130
+                                    keep_last = 70
                                     if len(msg) > length_limit:
                                         use_split = True
-                                        first = msg[:length_limit]
-                                        last = msg[length_limit:]
+                                        first = msg[:length_limit - keep_last]
+                                        middle = msg[length_limit - keep_last:-keep_last]
+                                        last = msg[-keep_last:]
                                     else:
                                         use_split = False
-                                        parts = None
                                 %>
                                 % if use_split:
-                                    <span class="dlv_message_link">${first}</span>\
-                                    <span style="display:inline;"
-                                    id="${id(event)}_extra"><a href="#" onclick="ILV.show_span(${id(event)})">...</a></span>\
-                                    <span id="${id(event)}" style="display:none">${last}</span>
+                                    <span class="dlv_message_link" onclick="javascript:ILV.show_span(${id(event)})">${first}\
+<span id="${id(event)}_extra"> ... </span>\
+<span id="${id(event)}" style="display:none">${middle}</span>${last}</span>
                                 % else:
                                     ${msg | h}\
                                 % endif
@@ -145,9 +148,15 @@ var ILV = {
     'show_span': function(name) {
         var name_id = "#" + name;
         var extra_name = name_id + "_extra";
-        DV(extra_name).remove();
-        DV(name_id).show();
+        DV(extra_name).toggle();
+        DV(name_id).toggle();
     },
+
+    'show_block': function(name) {
+        var name_id = "#" + name;
+        DV(name_id).toggle();
+    },
+
 
     'bind_hover': function() {
         DV('#ILVlogevents tbody tr').bind('hover', function() {
