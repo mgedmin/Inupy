@@ -92,20 +92,20 @@
 <div id="inupy_control">
     <span>
         <span id="inupy_logview" class="${logview_class}" title="Open LogView">
-            <a href="#" onclick="ILV.show_events('ILVlogevents');return false;">Log</a>
+            <a href="#" onclick="if (typeof ILV != 'undefined') ILV.show_events('ILVlogevents');return false;">Log</a>
         </span>
         <span id="inupy_profiler" class="${profiler_class}" title="Open Profiler">
             % if profiler_active:
                 <a target="_blank" href="/_profiler/showall">Profile</a>
             % else:
-                <a href="#">Profile</a>
+                <a href="#" onclick="return false;">Profile</a>
             % endif
         </span>
         <span id="inupy_leak" class="${memory_class}" title="Open Memory Dump">
             % if memory_active:
                 <a target="_blank" href="/_inupy/index">Memory</a>
             % else:
-                <a href="#">Memory</a>
+                <a href="#" onclick="return false;">Memory</a>
             % endif
         </span>
     </span>
