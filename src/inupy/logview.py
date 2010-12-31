@@ -25,7 +25,7 @@ here_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 class Logview(object):
-    def __init__(self, app, config=None, loglevel='DEBUG', **kwargs):
+    def __init__(self, app, config=None, loglevel=None, **kwargs):
         """Stores logging statements per request, and includes a bar on
         the page that shows the logging statements
 
@@ -41,11 +41,15 @@ class Logview(object):
         tmpl_dir = os.path.join(here_dir, 'templates')
         self.mako = TemplateLookup(directories=[tmpl_dir])
 
-        self.log_colors = {}
         self.inupy_config = config
 
         self.logger = logging.getLogger(__name__)
-        self.loglevel = getattr(logging, loglevel)
+        if loglevel is None:
+            self.loglevel = logging.getLogger('').level
+        elif isinstance(loglevel, basestring):
+            self.loglevel = getattr(logging, loglevel)
+        else:
+            self.loglevel = loglevel
 
         reqhandler = RequestHandler()
         reqhandler.setLevel(self.loglevel)
