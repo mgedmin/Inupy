@@ -28,32 +28,43 @@ def bg_color(event, log_colors):
         padding: 0;
     }
 
-    #ILVlogevents {
-        font-size: 11px;
-    }
-
     #ILVlogevents table {
         width: 100%;
         overflow: auto;
         color: #fff;
         background-color: rgba(51, 51, 51, 0.9);
+        border-spacing: 0;
+        border-collapse: collapse;
     }
 
     #ILVlogevents th,
     #ILVlogevents td {
         padding: 2px 6px;
+        text-transform: none;
+        font: 10pt/18pt sans-serif;
+    }
+    #ILVlogevents th {
+        font-weight: bold;
     }
 
     #ILVlogevents tr {
         text-align: left;
         vertical-align: top;
-        border-bottom: 1px solid #555;
+        border-bottom: 1px solid rgba(85, 85, 85, 0.9);
     }
 
     #dlv_footer {
         text-align: left;
         vertical-align: top;
         border-bottom: 1px solid #555;
+    }
+    #dlv_footer th {
+        color: #ccc;
+        font-weight: normal;
+    }
+    #dlv_footer td {
+        color: #fff;
+        font-weight: bold;
     }
 
     #ILVlogevents thead th,
@@ -70,7 +81,7 @@ def bg_color(event, log_colors):
                     <th>Time</th>
                     <th>Level</th>
                     <th>Module</th>
-                    <th>Message</th>
+                    <th width="100%">Message</th>
                 </tr>
             </thead>
             <tbody>
@@ -78,9 +89,9 @@ def bg_color(event, log_colors):
                 % for event in events:
                     <% bgcolor = bg_color(event, logcolors) %>
                         <tr style="background-color: ${bgcolor}">
-                            <td style="background-color: ${bgcolor}; text-align: right;">${format_time(event, start, prev_event)}</td>
-                            <td style="background-color: ${bgcolor};">${event.levelname}</td>
-                            <td style="background-color: ${bgcolor};">${event.name}</td>
+                            <td style="background-color: ${bgcolor}; color: #ccc; text-align: right;">${format_time(event, start, prev_event)}</td>
+                            <td style="background-color: ${bgcolor}; color: #ccc;">${event.levelname}</td>
+                            <td style="background-color: ${bgcolor}; color: #ccc;">${event.name}</td>
                             <td style="background-color: ${bgcolor};" width="100%">\
                                 <%
                                     msg = event.getMessage()
@@ -116,10 +127,6 @@ def bg_color(event, log_colors):
     </div>
 </div>
 <script type="text/javascript">
-DV(document).ready(function() {
-    ILV.bind_hover();
-});
-
 var ILV = {
     // load the logged events table ui
     'show_events': function(name) {
@@ -148,4 +155,9 @@ var ILV = {
         });
     }
 };
+
+DV(document).ready(function() {
+    ILV.bind_hover();
+});
+
 </script>
