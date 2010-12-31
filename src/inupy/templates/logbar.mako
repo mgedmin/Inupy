@@ -41,6 +41,8 @@ def fg_color(frame, traceback_colors):
         background-color: rgba(51, 51, 51, 0.97);
         border-spacing: 0;
         border-collapse: collapse;
+        -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
 
     #ILVlogevents th,
