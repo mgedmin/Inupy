@@ -34,6 +34,16 @@ def fg_color(frame, traceback_colors):
         padding: 0;
     }
 
+    #inupy-log-container * {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        font-size: 100%;
+        vertical-align: baseline;
+        background: transparent;
+    }
+
     #ILVlogevents table {
         width: 100%;
         overflow: auto;
