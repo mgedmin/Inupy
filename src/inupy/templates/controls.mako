@@ -1,7 +1,9 @@
 <style type="text/css">
     #inupy_control {
+        display: block;
+        margin: 0px;
         text-align: center;
-        padding: 6px 3px;
+        padding: 6px 6px;
         border: 1px solid #555;
         border-top: 0px;
         font: 14pt sans-serif;
@@ -9,6 +11,7 @@
         top: -1.5em;
         z-index: 1000;
         position: fixed;
+        color: white;
         background-color: rgba(51, 51, 51, 0.97);
         -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
@@ -27,7 +30,7 @@
     }
 
     #inupy_control.inupy_align_center {
-        width: 13em;
+        width: 14em;
         left: 0;
         right: 0;
         margin-left: auto;
@@ -46,11 +49,17 @@
         top: 0px;
     }
 
-    .inupy_button {
+    #inupy_control * {
         margin: 0;
         padding: 0;
+        border: 0;
+        outline: 0;
+        font-size: 100%;
+        vertical-align: baseline;
+        background: transparent;
     }
-    .inupy_button a {
+
+    #inupy_control .inupy_button a {
         padding: 4px 8px;
         color: #fff;
         font: 10pt/18pt sans-serif;
@@ -58,30 +67,30 @@
         cursor: pointer;
     }
 
-    .inupy_button + .inupy_button {
+    #inupy_control .inupy_button + .inupy_button {
         margin-left: 1px;
     }
 
-    .inupy_active_button a {
+    #inupy_control .inupy_active_button a {
         color: #FFF;
         text-decoration: none;
         font-weight: bold;
     }
 
-    .inupy_active_button a:hover {
+    #inupy_control .inupy_active_button a:hover {
         background-color: #555;
     }
 
-    .inupy_inactive_button a:hover {
+    #inupy_control .inupy_inactive_button a:hover {
         background-color: #383838;
     }
 
-    .inupy_inactive_button a {
+    #inupy_control .inupy_inactive_button a {
         color: #ccc;
         text-decoration: none;
     }
 
-    .inupy_inactive_button a:hover {
+    #inupy_control .inupy_inactive_button a:hover {
         color: #ccc;
     }
 </style>
